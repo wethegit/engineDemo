@@ -11,11 +11,6 @@ export interface IGameObject {
   ctx: CanvasRenderingContext2D;
   needsRedraw: boolean;
   renderable: boolean;
-
-  render(engine: GameEngine): void;
-  drawObject(): void;
-  draw(): void;
-  update(engine: GameEngine, deltaTime: number): void;
 }
 
 export type GameObjectProps = {

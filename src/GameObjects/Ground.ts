@@ -19,8 +19,8 @@ export class Ground extends GameObject implements IGround {
     console.log("drawing ground");
     this.ctx.clearRect(0, 0, this.dims.x, this.dims.y);
     this.ctx.fillStyle = "black";
-    this.ctx.fillRect(400, 300, 20, 20);
-    // this.ctx.fillRect( 0, this.dims.y/4, this.dims.x, this.dims.y/8);
+    // this.ctx.fillRect(400, 300, 20, 20);
+    this.ctx.fillRect(0, this.dims.y / 2, this.dims.x, this.dims.y / 2);
     this.needsRedraw = false;
   }
 }
