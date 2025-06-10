@@ -47,6 +47,7 @@ export class GameObject implements IGameObject {
 
   render(engine: GameEngine) {
     if (this.renderable) {
+      this.draw();
       const pos = this.position.scaleNew(engine.dpr);
       engine.ctx.drawImage(this.c, pos.x, pos.y);
     }

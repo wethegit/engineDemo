@@ -9,11 +9,13 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@tweakpane/core": "~2.0.5",
     "sass": "~1.89.1",
     "typescript": "~5.8.3",
     "vite": "^6.3.5"
   },
   "dependencies": {
+    "tweakpane": "~4.0.5",
     "wtc-math": "~1.0.20"
   }
 }

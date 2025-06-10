@@ -1,6 +1,7 @@
 import { Vec2 } from "wtc-math";
 
 import { GameObject } from "./GameObject";
+import { InputManager } from "./InputManager";
 
 export type GameEngineArguments = {
   canvas: HTMLCanvasElement;
@@ -17,6 +18,7 @@ export interface IGameEngine {
   lastTime: number;
   deltaTime: number;
   animationFrameId: number | null;
+  inputManager: InputManager;
 }
 
 export class GameEngine implements IGameEngine {
@@ -28,6 +30,7 @@ export class GameEngine implements IGameEngine {
   lastTime: number = 0;
   deltaTime: number = 0;
   animationFrameId: number | null = null;
+  inputManager: InputManager;
 
   constructor({
     canvas,
@@ -46,6 +49,7 @@ export class GameEngine implements IGameEngine {
     // this.ctx.scale(dpr, dpr);
 
     this.gameObjects = [];
+    this.inputManager = new InputManager();
   }
 
   addObject(obj: GameObject) {

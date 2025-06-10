@@ -2,6 +2,7 @@ import { Vec2 } from "wtc-math";
 
 import { GameEngine } from "./Core/GameEngine";
 import { Background, Ground, Player } from "./GameObjects";
+import { params } from "./config";
 
 const root = document.getElementById("root") as HTMLElement;
 
