@@ -4,6 +4,7 @@ import { Pane } from "tweakpane";
 export const params = {
   wind: new Vec2(0, 0),
   gravity: 1,
+  "ground height": 100,
 };
 
 const pane = new Pane();
@@ -14,3 +15,4 @@ globals.addBinding(params, "wind", {
   y: { min: -5, max: 5 },
 });
 globals.addBinding(params, "gravity");
+globals.addBinding(params, "ground height");

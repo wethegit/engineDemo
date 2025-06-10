@@ -36,7 +36,7 @@ if (gameEngine.canvas) {
   });
   const player = new Player({
     id: "player1",
-    position: new Vec2(50, 250),
+    position: new Vec2(50, LOGICAL_HEIGHT - params["ground height"] - 50),
     dimensions: new Vec2(50, 50),
     speed: 150,
     dpr,
