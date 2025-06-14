@@ -280,15 +280,17 @@ export class Player extends GameObject implements IPlayer {
       this.position.x = 0;
     }
 
-    // Cannon angle
-    if (engine.inputManager.isKeyDown("ArrowLeft")) {
-      this.cannonAngle -= 0.05;
+    if (engine.inputManager.isDragging()) {
+      const { startPos } = this._getBulletInitialState();
+      const mousePos = engine.inputManager.mousePosition.subtractNew(startPos);
+
+      // Cannon angle
+      this.cannonAngle = mousePos.angle;
       this.needsRedraw = true;
-      emit = true;
-    }
-    if (engine.inputManager.isKeyDown("ArrowRight")) {
-      this.cannonAngle += 0.05;
-      this.needsRedraw = true;
+
+      // Cannon strength
+      this.power = mousePos.length / 10;
+
       emit = true;
     }
     // Clamp angle
