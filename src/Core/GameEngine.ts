@@ -67,7 +67,7 @@ export class GameEngine implements IGameEngine {
     // this.ctx.scale(dpr, dpr);
 
     this.gameObjects = [];
-    this.inputManager = new InputManager();
+    this.inputManager = new InputManager(canvas);
   }
 
   /**
