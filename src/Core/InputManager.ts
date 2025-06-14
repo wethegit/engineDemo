@@ -10,25 +10,25 @@ export class InputManager {
    * `true` if the key is pressed, otherwise `false`.
    * @private
    */
-  private _keys: { [key: string]: boolean } = {};
+  #keys: { [key: string]: boolean } = {};
 
   /**
    * Stores the pressed state of mouse buttons.
    * @private
    */
-  private _mouseButtons: { [button: number]: boolean } = {};
+  #mouseButtons: { [button: number]: boolean } = {};
 
   /**
    * Current mouse position.
    * @private
    */
-  private _mousePosition: Vec2 = new Vec2(0, 0);
+  #mousePosition: Vec2 = new Vec2(0, 0);
 
   /**
    * Whether the mouse is currently being dragged.
    * @private
    */
-  private _isDragging: boolean = false;
+  #isDragging: boolean = false;
 
   /**
    * Initializes the InputManager and adds event listeners.
@@ -52,53 +52,53 @@ export class InputManager {
    * Handles the `keydown` event.
    * @param e The keyboard event.
    */
-  private onKeyDown(e: KeyboardEvent): void {
-    this._keys[e.key] = true;
+  onKeyDown(e: KeyboardEvent): void {
+    this.#keys[e.key] = true;
   }
 
   /**
    * Handles the `keyup` event.
    * @param e The keyboard event.
    */
-  private onKeyUp(e: KeyboardEvent): void {
-    this._keys[e.key] = false;
+  onKeyUp(e: KeyboardEvent): void {
+    this.#keys[e.key] = false;
   }
 
   /**
    * Handles the `mousedown` event.
    * @param e The mouse event.
    */
-  private onMouseDown(e: MouseEvent): void {
-    this._mouseButtons[e.button] = true;
-    this._isDragging = true;
+  onMouseDown(e: MouseEvent): void {
+    this.#mouseButtons[e.button] = true;
+    this.#isDragging = true;
   }
 
   /**
    * Handles the `mouseup` event.
    * @param e The mouse event.
    */
-  private onMouseUp(e: MouseEvent): void {
-    this._mouseButtons[e.button] = false;
-    this._isDragging = false;
+  onMouseUp(e: MouseEvent): void {
+    this.#mouseButtons[e.button] = false;
+    this.#isDragging = false;
   }
 
   /**
    * Handles the `mousemove` event.
    * @param e The mouse event.
    */
-  private onMouseMove(e: MouseEvent): void {
+  onMouseMove(e: MouseEvent): void {
     const rect = (e.target as HTMLCanvasElement).getBoundingClientRect();
-    this._mousePosition.x = e.clientX - rect.left;
-    this._mousePosition.y = e.clientY - rect.top;
+    this.#mousePosition.x = e.clientX - rect.left;
+    this.#mousePosition.y = e.clientY - rect.top;
   }
 
   /**
    * Handles the `mouseleave` event.
    */
-  private onMouseLeave(): void {
+  onMouseLeave(): void {
     // Reset all mouse buttons when mouse leaves the window
-    this._mouseButtons = {};
-    this._isDragging = false;
+    this.#mouseButtons = {};
+    this.#isDragging = false;
   }
 
   /**
@@ -106,8 +106,8 @@ export class InputManager {
    * @param key The key to check (e.g., 'w', 'ArrowUp').
    * @returns `true` if the key is pressed, otherwise `false`.
    */
-  public isKeyDown(key: string): boolean {
-    return this._keys[key] || false;
+  isKeyDown(key: string): boolean {
+    return this.#keys[key] || false;
   }
 
   /**
@@ -115,8 +115,8 @@ export class InputManager {
    * @param button The mouse button to check (0 = left, 1 = middle, 2 = right).
    * @returns `true` if the button is pressed, otherwise `false`.
    */
-  public isMouseButtonDown(button: number): boolean {
-    return this._mouseButtons[button] || false;
+  isMouseButtonDown(button: number): boolean {
+    return this.#mouseButtons[button] || false;
   }
 
   /**
@@ -124,14 +124,14 @@ export class InputManager {
    * @returns An object containing the x and y coordinates of the mouse.
    */
   get mousePosition(): Vec2 {
-    return this._mousePosition;
+    return this.#mousePosition;
   }
 
   /**
    * Checks if the mouse is currently being dragged.
    * @returns `true` if the mouse is being dragged, otherwise `false`.
    */
-  public isDragging(): boolean {
-    return this._isDragging;
+  isDragging(): boolean {
+    return this.#isDragging;
   }
 }
