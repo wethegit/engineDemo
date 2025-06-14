@@ -1,7 +1,7 @@
 import { Vec2 } from "wtc-math";
 
 import { GameEngine } from "./Core/GameEngine";
-import { Background, Ground, Player } from "./GameObjects";
+import { Background, Ground, Player, Trajectory } from "./GameObjects";
 import { params } from "./config";
 
 const root = document.getElementById("root") as HTMLElement;
@@ -34,17 +34,29 @@ if (gameEngine.canvas) {
     dimensions: new Vec2(LOGICAL_WIDTH, LOGICAL_HEIGHT),
     dpr,
   });
+  const playerSize = 80;
   const player = new Player({
     id: "player1",
-    position: new Vec2(50, LOGICAL_HEIGHT - params["ground height"] - 25),
-    dimensions: new Vec2(50, 50),
+    position: new Vec2(
+      50,
+      LOGICAL_HEIGHT - params["ground height"] - playerSize
+    ),
+    dimensions: new Vec2(playerSize, playerSize),
     speed: 150,
     dpr,
   });
+  const trajectory = new Trajectory({
+    id: "trajectory-player1",
+    position: new Vec2(0, 0),
+    dimensions: new Vec2(LOGICAL_WIDTH, LOGICAL_HEIGHT),
+    dpr,
+    playerObject: player,
+  });
 
-  gameEngine.addObject(background);
-  gameEngine.addObject(ground);
-  gameEngine.addObject(player);
+  gameEngine.addGameObject(background);
+  gameEngine.addGameObject(ground);
+  gameEngine.addGameObject(trajectory);
+  gameEngine.addGameObject(player);
 
   gameEngine.playing = true;
 }

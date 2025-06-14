@@ -84,7 +84,7 @@ export class GameEngine implements IGameEngine {
    * Adds a game object to the scene.
    * @param {GameObject} obj - The game object to add.
    */
-  addObject(obj: GameObject) {
+  addGameObject(obj: GameObject) {
     if (obj instanceof GameObject) {
       this.gameObjects.push(obj);
     }
@@ -94,8 +94,8 @@ export class GameEngine implements IGameEngine {
    * Removes a game object from the scene.
    * @param {GameObject} obj - The game object to remove.
    */
-  removeObject(obj: GameObject) {
-    this.gameObjects = this.gameObjects.filter((o) => o !== obj);
+  removeGameObject(obj: GameObject) {
+    this.gameObjects = this.gameObjects.filter((o) => o.id !== obj.id);
   }
 
   /**
@@ -152,6 +152,9 @@ export class GameEngine implements IGameEngine {
    */
   update(deltaTime: number) {
     this.gameObjects.forEach((obj) => obj.update(this, deltaTime));
+
+    // Cleanup destroyed objects
+    this.gameObjects = this.gameObjects.filter((o) => !o.isDestroyed);
   }
 
   /**

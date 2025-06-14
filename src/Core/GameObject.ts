@@ -38,6 +38,8 @@ export interface IGameObject {
   rotation: number;
   /** A flag indicating whether the game object is currently renderable. */
   renderable: boolean;
+  /** A flag indicating that the game object should be removed from the game. */
+  isDestroyed: boolean;
 }
 
 /**
@@ -78,6 +80,8 @@ export class GameObject implements IGameObject {
   c: HTMLCanvasElement;
   /** @inheritdoc */
   ctx: CanvasRenderingContext2D;
+  /** @inheritdoc */
+  isDestroyed: boolean;
 
   /**
    * Creates a new GameObject instance.
@@ -105,6 +109,8 @@ export class GameObject implements IGameObject {
     this.c.height = this.dims.y * dpr;
 
     this.ctx.scale(dpr, dpr);
+
+    this.isDestroyed = false;
 
     this.draw();
   }

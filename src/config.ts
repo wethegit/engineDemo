@@ -9,7 +9,6 @@ export const params = {
 
 const pane = new Pane();
 const globals = pane.addFolder({ title: "Globals" });
-console.log(pane);
 globals.addBinding(params, "wind", {
   x: { min: -5, max: 5 },
   y: { min: -5, max: 5 },
