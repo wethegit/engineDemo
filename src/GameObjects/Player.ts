@@ -66,5 +66,17 @@ export class Player extends GameObject implements IPlayer {
    * @param engine The game engine instance.
    * @param deltaTime The time elapsed since the last frame.
    */
-  update(engine: GameEngine, deltaTime: number) {}
+  update(engine: GameEngine, deltaTime: number) {
+    if (engine.inputManager.isKeyDown("a")) {
+      this.position.x -= this.speed * deltaTime;
+    } else if (engine.inputManager.isKeyDown("d")) {
+      this.position.x += this.speed * deltaTime;
+    }
+
+    if (this.position.x > engine.dims.x) {
+      this.position.x = -this.dims.x;
+    } else if (this.position.x < -this.dims.x) {
+      this.position.x = engine.dims.x;
+    }
+  }
 }
