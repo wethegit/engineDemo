@@ -63,6 +63,38 @@ class GameEngine {
 // - State management
 ```
 
+#### InputManager
+
+Handles keyboard and mouse input for the game engine.
+
+```typescript
+class InputManager {
+  constructor(canvas: HTMLCanvasElement);
+
+  // Properties
+  mousePosition: Vec2;
+  mouseButtons: Map<number, boolean>;
+  keys: Map<string, boolean>;
+
+  // Methods
+  isKeyPressed(key: string): boolean;
+  isMouseButtonPressed(button: number): boolean;
+  getMousePosition(): Vec2;
+  addKeyListener(key: string, callback: (pressed: boolean) => void): void;
+  removeKeyListener(key: string, callback: (pressed: boolean) => void): void;
+  addMouseButtonListener(
+    button: number,
+    callback: (pressed: boolean) => void
+  ): void;
+  removeMouseButtonListener(
+    button: number,
+    callback: (pressed: boolean) => void
+  ): void;
+  addMouseMoveListener(callback: (position: Vec2) => void): void;
+  removeMouseMoveListener(callback: (position: Vec2) => void): void;
+}
+```
+
 #### GameObject
 
 Base class for all game objects. Provides common functionality for rendering and updating.
@@ -120,25 +152,6 @@ class Rectangle {
 ```
 
 ### Game Objects
-
-#### Bullet
-
-Represents a projectile in the game.
-
-```typescript
-class Bullet extends GameObject {
-  constructor(props: {
-    id: string;
-    position: Vec2;
-    velocity: Vec2;
-    radius?: number;
-  });
-
-  // Properties
-  physics: IElement;
-  radius: number;
-}
-```
 
 #### Player
 
@@ -213,15 +226,6 @@ engine.playing = false;
 - Each game object has its own offscreen canvas for rendering
 - Objects are only redrawn when `needsRedraw` is true
 - The main canvas is cleared and redrawn every frame
-- High DPI displays are supported through the `dpr` parameter
-
-### Physics
-
-The engine uses a simple physics system:
-
-- Gravity and wind forces can be applied to objects
-- Collision detection is handled by individual game objects
-- Physics calculations are performed in the update loop
 
 ### Input Handling
 
