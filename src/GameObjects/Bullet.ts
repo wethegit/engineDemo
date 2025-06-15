@@ -42,7 +42,7 @@ export class Bullet extends GameObject implements IBullet {
   constructor({ id, position, dpr, velocity, radius = 5 }: BulletProps) {
     super({
       id,
-      position: position.subtractScalarNew(radius),
+      position: position,
       dimensions: new Vec2(radius * 2, radius * 2),
       dpr,
     });

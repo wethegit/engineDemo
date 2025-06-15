@@ -8,6 +8,7 @@ import { Element, type IElement } from "../Physics/Element";
 import { params } from "../config";
 import type { GameEngine } from "../Core/GameEngine";
 import { Player } from "./Player";
+import { AnchorPoint } from "../Core/GameObject";
 
 /**
  * Interface representing a Bullet game object.
@@ -56,6 +57,7 @@ export class Trajectory extends GameObject implements ITrajectory {
       position,
       dimensions,
       dpr,
+      anchorPoint: AnchorPoint.TOP_LEFT,
     });
     this.playerObject = playerObject;
     playerObject.addListener(this);

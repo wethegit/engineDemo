@@ -156,8 +156,9 @@ export class Player extends GameObject implements IPlayer {
   private _getBulletInitialState(): { startPos: Vec2; velocity: Vec2 } {
     const { cannonLength, turretCenterY } = this.tankProperties;
 
-    const worldTurretCenterX = this.position.x + this.dims.x / 2;
-    const worldTurretCenterY = this.position.y + this.dims.y + turretCenterY;
+    const worldTurretCenterX = this.position.x;
+    const worldTurretCenterY =
+      this.position.y + this.dims.y / 2 + turretCenterY;
 
     const angle = this.cannonAngle;
     const startPos = new Vec2(
@@ -177,6 +178,7 @@ export class Player extends GameObject implements IPlayer {
    * Draws the player's tank on the canvas.
    */
   drawObject() {
+    // super.drawObject();
     this.ctx.clearRect(0, 0, this.dims.x, this.dims.y);
 
     this.ctx.save();
@@ -273,11 +275,10 @@ export class Player extends GameObject implements IPlayer {
       emit = true;
     }
     // Clamp position to screen bounds
-    const right = this.position.x + this.dims.x > engine.dims.x;
-    if (right) {
-      this.position.x = engine.dims.x - this.dims.x;
-    } else if (this.position.x < 0) {
-      this.position.x = 0;
+    if (this.position.x > engine.dims.x + this.dims.x) {
+      this.position.x = -this.dims.x;
+    } else if (this.position.x < -this.dims.x) {
+      this.position.x = engine.dims.x + this.dims.x;
     }
 
     if (engine.inputManager.isDragging()) {

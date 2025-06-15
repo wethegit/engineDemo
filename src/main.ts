@@ -39,7 +39,7 @@ if (gameEngine.canvas) {
     id: "player1",
     position: new Vec2(
       50,
-      LOGICAL_HEIGHT - params["ground height"] - playerSize
+      LOGICAL_HEIGHT - params["ground height"] - playerSize / 2
     ),
     dimensions: new Vec2(playerSize, playerSize),
     speed: 150,
@@ -55,8 +55,8 @@ if (gameEngine.canvas) {
 
   gameEngine.addGameObject(background);
   gameEngine.addGameObject(ground);
-  gameEngine.addGameObject(trajectory);
   gameEngine.addGameObject(player);
+  gameEngine.addGameObject(trajectory);
 
   gameEngine.playing = true;
 }
