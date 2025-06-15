@@ -36,6 +36,8 @@ export interface IGameObject {
   needsRedraw: boolean;
   /** The rotation of the game object in radians. */
   rotation: number;
+  /** A flag indicating whether the game object is currently renderable. */
+  renderable: boolean;
 }
 
 /**
@@ -173,7 +175,7 @@ export class GameObject implements IGameObject {
    * This can be used for culling objects that are off-screen.
    * @returns {boolean} True if the object should be rendered, false otherwise.
    */
-  get renderable() {
+  get renderable(): boolean {
     return true;
   }
 

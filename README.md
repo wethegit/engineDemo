@@ -13,6 +13,7 @@ A TypeScript-based game engine demo project that showcases basic game engine fun
 ├── src/
 │   ├── Core/           # Core engine components
 │   ├── GameObjects/    # Game object implementations
+│   ├── Helpers/        # Helper classes and utilities
 │   ├── config.ts       # Configuration settings
 │   ├── main.ts         # Main application entry point
 │   └── style.scss      # Styling
@@ -96,12 +97,24 @@ class GameEngine {
   // Methods
   addObject(obj: GameObject): void;
   removeObject(obj: GameObject): void;
+  clearScene(): void;
+  getObjectById(id: string): GameObject | undefined;
+  getObjectsInArea(area: Rectangle): GameObject[];
+  swapObjectIndices(obj1: GameObject, obj2: GameObject): boolean;
   update(deltaTime: number): void;
   draw(): void;
 
   // Game Loop Control
   playing: boolean; // Getter/Setter
 }
+
+// Planned Features
+// - Camera functionality
+// - Time management functions
+// - Type-based object filtering
+// - Debug mode
+// - Event system
+// - State management
 ```
 
 #### GameObject
@@ -114,23 +127,49 @@ class GameObject {
     id: string;
     position: Vec2;
     dimensions: Vec2;
+    anchorPoint?: AnchorPoint;
     dpr?: number;
+    rotation?: number;
   });
 
   // Properties
   id: string;
   position: Vec2;
   dims: Vec2;
+  anchorPoint: AnchorPoint;
   dpr: number;
   c: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
   needsRedraw: boolean;
+  rotation: number;
+  bounds: Rectangle;
   renderable: boolean;
 
   // Methods
   render(engine: GameEngine): void;
   drawObject(): void;
   update(engine: GameEngine, deltaTime: number): void;
+}
+```
+
+#### Rectangle
+
+Helper class for handling rectangular areas and collision detection.
+
+```typescript
+class Rectangle {
+  constructor(x: number, y: number, width: number, height: number);
+
+  // Properties
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+
+  // Methods
+  static fromPositionAndDimensions(position: Vec2, dimensions: Vec2): Rectangle;
+  intersects(other: Rectangle): boolean;
+  containsPoint(point: Vec2): boolean;
 }
 ```
 
