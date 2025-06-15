@@ -4,6 +4,15 @@ import { GameObject } from "./GameObject";
 import { InputManager } from "./InputManager";
 import { Rectangle } from "../Helpers/Rectangle";
 
+/** TODO:
+ * - Add Camera functionality.
+ * - Add some time management functions.
+ * - Add a way to get objects by type.
+ * - Add debug mode.
+ * - Add event system
+ * - Add state management.
+ */
+
 export type GameEngineArguments = {
   canvas: HTMLCanvasElement;
   dimensions?: Vec2;
