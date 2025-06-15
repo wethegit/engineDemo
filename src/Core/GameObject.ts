@@ -3,6 +3,16 @@ import type { Vec2 } from "wtc-math";
 import type { GameEngine } from "./GameEngine";
 
 /**
+ * Enum representing the anchor point of a game object.
+ */
+export enum AnchorPoint {
+  /** The object is positioned by its center point */
+  CENTER = "center",
+  /** The object is positioned by its top-left corner */
+  TOP_LEFT = "top-left",
+}
+
+/**
  * Interface representing the basic properties of a game object.
  */
 export interface IGameObject {
@@ -12,6 +22,8 @@ export interface IGameObject {
   position: Vec2;
   /** The dimensions of the game object. */
   dims: Vec2;
+  /** The anchor point of the game object. */
+  anchorPoint: AnchorPoint;
   /** The device pixel ratio, used for high-resolution rendering. */
   dpr: number;
   /** The offscreen canvas element for the game object. */
@@ -34,6 +46,8 @@ export type GameObjectProps = {
   position: Vec2;
   /** The dimensions of the game object. */
   dimensions: Vec2;
+  /** The anchor point of the game object. Defaults to CENTER. */
+  anchorPoint?: AnchorPoint;
   /** The device pixel ratio, used for rendering on high-resolution displays. Defaults to 2. */
   dpr?: number;
 };
@@ -51,6 +65,8 @@ export class GameObject implements IGameObject {
   /** @inheritdoc */
   dims: Vec2;
   /** @inheritdoc */
+  anchorPoint: AnchorPoint;
+  /** @inheritdoc */
   dpr: number;
   /** @inheritdoc */
   c: HTMLCanvasElement;
@@ -61,10 +77,17 @@ export class GameObject implements IGameObject {
    * Creates a new GameObject instance.
    * @param {GameObjectProps} props - The properties for the game object.
    */
-  constructor({ id, position, dimensions, dpr = 2 }: GameObjectProps) {
+  constructor({
+    id,
+    position,
+    dimensions,
+    anchorPoint = AnchorPoint.CENTER,
+    dpr = 2,
+  }: GameObjectProps) {
     this.id = id;
     this.position = position;
     this.dims = dimensions;
+    this.anchorPoint = anchorPoint;
     this.dpr = dpr;
     this.c = document.createElement("canvas");
     const ctx = this.c.getContext("2d");
@@ -85,8 +108,11 @@ export class GameObject implements IGameObject {
   render(engine: GameEngine) {
     if (this.renderable) {
       this.draw();
-      const pos = this.position.scaleNew(engine.dpr);
-      engine.ctx.drawImage(this.c, pos.x, pos.y);
+      const pos =
+        this.anchorPoint === AnchorPoint.CENTER
+          ? this.position.subtractNew(this.dims.scaleNew(0.5))
+          : this.position;
+      engine.ctx.drawImage(this.c, pos.x, pos.y, this.dims.x, this.dims.y);
     }
   }
 

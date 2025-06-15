@@ -64,7 +64,7 @@ export class GameEngine implements IGameEngine {
     this.ctx = ctx;
     canvas.width = this.dims.x * dpr;
     canvas.height = this.dims.y * dpr;
-    // this.ctx.scale(dpr, dpr);
+    this.ctx.scale(dpr, dpr);
 
     this.gameObjects = [];
     this.inputManager = new InputManager(canvas);
@@ -100,7 +100,7 @@ export class GameEngine implements IGameEngine {
    * Draws all game objects in the scene.
    */
   draw() {
-    this.ctx.clearRect(0, 0, this.dims.x, this.dims.y);
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.gameObjects.forEach((obj) => {
       obj.render(this);

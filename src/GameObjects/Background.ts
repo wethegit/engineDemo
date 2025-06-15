@@ -5,6 +5,7 @@ import {
   type GameObjectProps,
   type IGameObject,
 } from "../Core/GameObject";
+import { AnchorPoint } from "../Core/GameObject";
 
 /**
  * Interface for the Background game object.
@@ -27,7 +28,13 @@ export class Background extends GameObject implements IBackground {
    * @param dpr The device pixel ratio.
    */
   constructor({ id, dimensions, dpr = 2 }: BackgroundProps) {
-    super({ id, position: new Vec2(0, 0), dimensions, dpr });
+    super({
+      id,
+      position: new Vec2(0, 0),
+      dimensions,
+      dpr,
+      anchorPoint: AnchorPoint.TOP_LEFT,
+    });
   }
 
   /**

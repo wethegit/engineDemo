@@ -5,6 +5,7 @@ import {
   GameObject,
   type GameObjectProps,
   type IGameObject,
+  AnchorPoint,
 } from "../Core/GameObject";
 
 /**
@@ -28,7 +29,13 @@ export class Ground extends GameObject implements IGround {
    * @param dpr The device pixel ratio.
    */
   constructor({ id, dimensions, dpr = 2 }: GroundProps) {
-    super({ id, position: new Vec2(0, 0), dimensions, dpr });
+    super({
+      id,
+      position: new Vec2(0, 0),
+      dimensions,
+      dpr,
+      anchorPoint: AnchorPoint.TOP_LEFT,
+    });
   }
 
   /**
