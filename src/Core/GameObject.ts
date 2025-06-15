@@ -2,6 +2,7 @@ import { Mat2 } from "wtc-math";
 import type { Vec2 } from "wtc-math";
 
 import type { GameEngine } from "./GameEngine";
+import { Rectangle } from "../Helpers/Rectangle";
 
 /**
  * Enum representing the anchor point of a game object.
@@ -33,8 +34,6 @@ export interface IGameObject {
   ctx: CanvasRenderingContext2D;
   /** A flag indicating whether the game object needs to be redrawn. */
   needsRedraw: boolean;
-  /** A flag indicating whether the game object is currently renderable. */
-  renderable: boolean;
   /** The rotation of the game object in radians. */
   rotation: number;
 }
@@ -125,13 +124,9 @@ export class GameObject implements IGameObject {
           ? this.position.subtractNew(this.dims.scaleNew(0.5))
           : this.position;
 
-      // Move to the center of the object
+      // Move to the center of the object, then rotate
       engine.ctx.translate(pos.x + this.dims.x / 2, pos.y + this.dims.y / 2);
-
-      // Apply rotation around the center
       engine.ctx.rotate(this.rotation);
-
-      // Move back to draw from the top-left corner
       engine.ctx.translate(-this.dims.x / 2, -this.dims.y / 2);
 
       // Draw the object
@@ -190,7 +185,7 @@ export class GameObject implements IGameObject {
   set needsRedraw(needsRedraw) {
     this.#needsRedraw = needsRedraw === true;
   }
-  get needsRedraw() {
+  get needsRedraw(): boolean {
     return this.#needsRedraw;
   }
 
@@ -199,10 +194,22 @@ export class GameObject implements IGameObject {
    * Sprite rotation.
    * @param {number} rotation - The rotation of the sprite in radians.
    */
-  get rotation() {
+  get rotation(): number {
     return this.#rotation;
   }
   set rotation(rotation) {
     this.#rotation = rotation;
+  }
+
+  /**
+   * Gets the bounding rectangle of the game object.
+   * @returns {Rectangle} The bounding rectangle of the game object
+   */
+  get bounds(): Rectangle {
+    const pos =
+      this.anchorPoint === AnchorPoint.CENTER
+        ? this.position.subtractNew(this.dims.scaleNew(0.5))
+        : this.position;
+    return Rectangle.fromPositionAndDimensions(pos, this.dims);
   }
 }

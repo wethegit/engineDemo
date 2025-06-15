@@ -2,6 +2,7 @@ import { Vec2 } from "wtc-math";
 
 import { GameObject } from "./GameObject";
 import { InputManager } from "./InputManager";
+import { Rectangle } from "../Helpers/Rectangle";
 
 export type GameEngineArguments = {
   canvas: HTMLCanvasElement;
@@ -86,6 +87,54 @@ export class GameEngine implements IGameEngine {
    */
   removeObject(obj: GameObject) {
     this.gameObjects = this.gameObjects.filter((o) => o !== obj);
+  }
+
+  /**
+   * Clears all game objects from the scene.
+   */
+  clearScene() {
+    this.gameObjects = [];
+  }
+
+  /**
+   * Finds a game object by its ID.
+   * @param {string} id - The ID of the game object to find.
+   * @returns {GameObject | undefined} The found game object or undefined if not found.
+   */
+  getObjectById(id: string): GameObject | undefined {
+    return this.gameObjects.find((obj) => obj.id === id);
+  }
+
+  /**
+   * Gets all game objects within a specific area.
+   * @param {Rectangle} area - The area to check for objects.
+   * @returns {GameObject[]} Array of game objects within the specified area.
+   */
+  getObjectsInArea(area: Rectangle): GameObject[] {
+    return this.gameObjects.filter((obj) => {
+      const bounds = obj.bounds;
+      return area.intersects(bounds);
+    });
+  }
+
+  /**
+   * Swaps the index positions of two game objects in the scene.
+   * @param {GameObject} obj1 - The first game object.
+   * @param {GameObject} obj2 - The second game object.
+   * @returns {boolean} True if the swap was successful, false if either object wasn't found.
+   */
+  swapObjectIndices(obj1: GameObject, obj2: GameObject): boolean {
+    const index1 = this.gameObjects.indexOf(obj1);
+    const index2 = this.gameObjects.indexOf(obj2);
+
+    if (index1 === -1 || index2 === -1) return false;
+
+    [this.gameObjects[index1], this.gameObjects[index2]] = [
+      this.gameObjects[index2],
+      this.gameObjects[index1],
+    ];
+
+    return true;
   }
 
   /**
