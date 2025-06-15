@@ -2,34 +2,6 @@
 
 A TypeScript-based game engine demo project that showcases basic game engine functionality and UI controls using Tweakpane.
 
-## Prerequisites
-
-- Node.js (version specified in `.nvmrc`)
-- npm (comes with Node.js)
-
-## Project Structure
-
-```
-├── src/
-│   ├── Core/           # Core engine components
-│   ├── GameObjects/    # Game object implementations
-│   ├── Helpers/        # Helper classes and utilities
-│   ├── config.ts       # Configuration settings
-│   ├── main.ts         # Main application entry point
-│   └── style.scss      # Styling
-├── public/             # Static assets
-├── index.html          # Main HTML file
-└── package.json        # Project dependencies and scripts
-```
-
-## Technologies Used
-
-- TypeScript
-- Vite (Build tool and development server)
-- Tweakpane (UI controls)
-- SASS (Styling)
-- wtc-math (Maths library)
-
 ## Getting Started
 
 1. Install dependencies:
@@ -43,32 +15,6 @@ A TypeScript-based game engine demo project that showcases basic game engine fun
    ```bash
    npm run dev
    ```
-
-## Development
-
-The project uses Vite as the build tool and development server. The main entry point is `src/main.ts`, and the application is styled using SCSS.
-
-## Dependencies
-
-### Development Dependencies
-
-- @tweakpane/core (~2.0.5)
-- sass (~1.89.1)
-- typescript (~5.8.3)
-- vite (^6.3.5)
-
-### Runtime Dependencies
-
-- tweakpane (~4.0.5)
-- wtc-math (~1.0.20)
-
-## License
-
-This project is private and not licensed for public use.
-
-## Version
-
-Current version: 0.0.0
 
 ## Class Reference
 
