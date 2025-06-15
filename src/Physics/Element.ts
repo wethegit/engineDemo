@@ -75,7 +75,11 @@ export class Element implements IElement {
    * @param props An object containing the time step.
    * @param props.delta The time elapsed since the last integration, in seconds.
    */
-  integrate({ delta }: { delta: number }): void {
+  integrate({ delta }: { delta: number }): {
+    acceleration: Vec2;
+    position: Vec2;
+    oldPosition: Vec2;
+  } {
     const tp = this.position.clone();
 
     // v = p - p_old
@@ -86,5 +90,11 @@ export class Element implements IElement {
 
     this.oldPosition.resetToVector(tp);
     this.acceleration.reset(0, 0);
+
+    return {
+      acceleration: this.position.subtractNew(this.oldPosition),
+      position: this.position.clone(),
+      oldPosition: this.oldPosition.clone(),
+    };
   }
 }

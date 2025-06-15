@@ -19,7 +19,7 @@ export interface ITrajectory extends IGameObject {
   /** The player object that is firing the trajectory. */
   playerObject: Player;
   /** The points of the trajectory. */
-  points: Vec2[];
+  points: (Vec2 | null)[];
   /** Whether the trajectory needs to be updated. */
   needsUpdate: boolean;
 }
@@ -39,7 +39,7 @@ export class Trajectory extends GameObject implements ITrajectory {
   physics: IElement;
   playerObject: Player;
   needsUpdate: boolean = true;
-  points: Vec2[] = [];
+  points: (Vec2 | null)[] = [];
 
   /**
    * Creates a new Bullet object.
@@ -77,10 +77,25 @@ export class Trajectory extends GameObject implements ITrajectory {
     this.ctx.clearRect(0, 0, this.dims.x, this.dims.y);
 
     this.ctx.beginPath();
-    this.ctx.moveTo(this.points[0].x, this.points[0].y);
-    for (let i = 1; i < this.points.length; i++) {
-      this.ctx.lineTo(this.points[i].x, this.points[i].y);
+    let isFirstPoint = true;
+
+    for (const point of this.points) {
+      if (point === null) {
+        // End the current path and start a new one
+        this.ctx.stroke();
+        this.ctx.beginPath();
+        isFirstPoint = true;
+        continue;
+      }
+
+      if (isFirstPoint) {
+        this.ctx.moveTo(point.x, point.y);
+        isFirstPoint = false;
+      } else {
+        this.ctx.lineTo(point.x, point.y);
+      }
     }
+
     this.ctx.stroke();
     this.needsRedraw = false;
   }
@@ -105,20 +120,44 @@ export class Trajectory extends GameObject implements ITrajectory {
     this.points.length = 0;
 
     const timeStep = 1 / 60;
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 200; i++) {
       if (i % 3 == 0) this.points.push(this.physics.position.clone());
 
       this.physics.applyForce(new Vec2(0, params.gravity * 50000 * timeStep));
       this.physics.applyForce(params.wind.scaleNew(50000 * timeStep));
-      this.physics.integrate({ delta: timeStep });
+      const { acceleration, position, oldPosition } = this.physics.integrate({
+        delta: timeStep,
+      });
 
-      if (this.physics.position.y > engine.dims.y - params["ground height"])
+      // Handle vertical wrapping
+      if (this.physics.position.y > engine.dims.y - params["ground height"]) {
+        this.points.push(this.physics.position.clone());
         break;
-      if (
-        this.physics.position.x < 0 ||
-        this.physics.position.x > engine.dims.x
-      )
-        break;
+      }
+
+      // Handle horizontal wrapping
+      if (this.physics.position.x < 0) {
+        // Add the point at the left edge
+        this.points.push(new Vec2(0, this.physics.position.y));
+        // Add a break point (null) to indicate a gap in the line
+        this.points.push(null);
+        // Wrap to the right side
+        this.physics.position.x = engine.dims.x;
+        this.physics.oldPosition =
+          this.physics.position.subtractNew(acceleration);
+        this.points.push(this.physics.position.clone());
+      } else if (this.physics.position.x > engine.dims.x) {
+        // Add the point at the right edge
+        this.points.push(new Vec2(engine.dims.x, this.physics.position.y));
+        // Add a break point (null) to indicate a gap in the line
+        this.points.push(null);
+        // Wrap to the left side
+        this.physics.position.x = 0;
+        this.physics.oldPosition.resetToVector(
+          this.physics.position.subtractNew(acceleration)
+        );
+        this.points.push(this.physics.position.clone());
+      }
     }
 
     this.needsUpdate = false;
