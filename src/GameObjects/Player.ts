@@ -86,10 +86,10 @@ export class Player extends GameObject implements IPlayer {
       this.position.x += this.speed * deltaTime;
     }
 
-    if (this.position.x > engine.dims.x) {
+    if (this.position.x > engine.dims.x + this.dims.x) {
       this.position.x = -this.dims.x;
     } else if (this.position.x < -this.dims.x) {
-      this.position.x = engine.dims.x;
+      this.position.x = engine.dims.x + this.dims.x;
     }
   }
 }
