@@ -57,16 +57,16 @@ export class Player extends GameObject implements IPlayer {
   drawObject() {
     this.ctx.clearRect(0, 0, this.dims.x, this.dims.y);
     this.ctx.fillStyle = "magenta";
-    // this.ctx.fillRect(0, 0, this.dims.x, this.dims.y);
-    this.ctx.beginPath();
-    this.ctx.arc(
-      this.dims.x / 2,
-      this.dims.y / 2,
-      this.dims.x / 2,
-      0,
-      Math.PI * 2
-    );
-    this.ctx.fill();
+    this.ctx.fillRect(0, 0, this.dims.x, this.dims.y);
+    // this.ctx.beginPath();
+    // this.ctx.arc(
+    //   this.dims.x / 2,
+    //   this.dims.y / 2,
+    //   this.dims.x / 2,
+    //   0,
+    //   Math.PI * 2
+    // );
+    // this.ctx.fill();
     this.ctx.fillStyle = "black";
     this.ctx.beginPath();
     this.ctx.arc(this.dims.x / 2, this.dims.y / 2, 2, 0, Math.PI * 2);

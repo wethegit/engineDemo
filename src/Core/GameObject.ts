@@ -77,8 +77,6 @@ export class GameObject implements IGameObject {
   c: HTMLCanvasElement;
   /** @inheritdoc */
   ctx: CanvasRenderingContext2D;
-  /** @inheritdoc */
-  rotation: number;
 
   /**
    * Creates a new GameObject instance.
@@ -186,17 +184,25 @@ export class GameObject implements IGameObject {
 
   #needsRedraw = true;
   /**
-   * Sets the needsRedraw flag.
+   * needsRedraw flag.
    * @param {boolean} needsRedraw - Whether the object needs to be redrawn.
    */
   set needsRedraw(needsRedraw) {
     this.#needsRedraw = needsRedraw === true;
   }
-  /**
-   * Gets the needsRedraw flag.
-   * @returns {boolean} True if the object needs to be redrawn, false otherwise.
-   */
   get needsRedraw() {
     return this.#needsRedraw;
+  }
+
+  #rotation: number = 0;
+  /**
+   * Sprite rotation.
+   * @param {number} rotation - The rotation of the sprite in radians.
+   */
+  get rotation() {
+    return this.#rotation;
+  }
+  set rotation(rotation) {
+    this.#rotation = rotation;
   }
 }
