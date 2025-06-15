@@ -1,3 +1,4 @@
+import { Mat2 } from "wtc-math";
 import type { Vec2 } from "wtc-math";
 
 import type { GameEngine } from "./GameEngine";
@@ -34,6 +35,8 @@ export interface IGameObject {
   needsRedraw: boolean;
   /** A flag indicating whether the game object is currently renderable. */
   renderable: boolean;
+  /** The rotation of the game object in radians. */
+  rotation: number;
 }
 
 /**
@@ -50,6 +53,8 @@ export type GameObjectProps = {
   anchorPoint?: AnchorPoint;
   /** The device pixel ratio, used for rendering on high-resolution displays. Defaults to 2. */
   dpr?: number;
+  /** The initial rotation of the game object in radians. Defaults to 0. */
+  rotation?: number;
 };
 
 /**
@@ -72,6 +77,8 @@ export class GameObject implements IGameObject {
   c: HTMLCanvasElement;
   /** @inheritdoc */
   ctx: CanvasRenderingContext2D;
+  /** @inheritdoc */
+  rotation: number;
 
   /**
    * Creates a new GameObject instance.
@@ -83,12 +90,14 @@ export class GameObject implements IGameObject {
     dimensions,
     anchorPoint = AnchorPoint.CENTER,
     dpr = 2,
+    rotation = 0,
   }: GameObjectProps) {
     this.id = id;
     this.position = position;
     this.dims = dimensions;
     this.anchorPoint = anchorPoint;
     this.dpr = dpr;
+    this.rotation = rotation;
     this.c = document.createElement("canvas");
     const ctx = this.c.getContext("2d");
     if (!ctx) throw new Error("Could not get 2d context");
@@ -108,11 +117,30 @@ export class GameObject implements IGameObject {
   render(engine: GameEngine) {
     if (this.renderable) {
       this.draw();
+
+      // Save the current context state
+      engine.ctx.save();
+
+      // Calculate the position based on anchor point
       const pos =
         this.anchorPoint === AnchorPoint.CENTER
           ? this.position.subtractNew(this.dims.scaleNew(0.5))
           : this.position;
-      engine.ctx.drawImage(this.c, pos.x, pos.y, this.dims.x, this.dims.y);
+
+      // Move to the center of the object
+      engine.ctx.translate(pos.x + this.dims.x / 2, pos.y + this.dims.y / 2);
+
+      // Apply rotation around the center
+      engine.ctx.rotate(this.rotation);
+
+      // Move back to draw from the top-left corner
+      engine.ctx.translate(-this.dims.x / 2, -this.dims.y / 2);
+
+      // Draw the object
+      engine.ctx.drawImage(this.c, 0, 0, this.dims.x, this.dims.y);
+
+      // Restore the context state
+      engine.ctx.restore();
     }
   }
 
