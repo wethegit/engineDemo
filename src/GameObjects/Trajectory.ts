@@ -1,14 +1,16 @@
 import { Vec2 } from "wtc-math";
+import type { GameEngine } from "../Core/GameEngine";
 import {
   GameObject,
   type GameObjectProps,
   type IGameObject,
+  AnchorPoint,
 } from "../Core/GameObject";
+
 import { Element, type IElement } from "../Physics/Element";
 import { params } from "../config";
-import type { GameEngine } from "../Core/GameEngine";
 import { Player } from "./Player";
-import { AnchorPoint } from "../Core/GameObject";
+import { rayBoundaryIntersection } from "../Helpers/Intersections";
 
 /**
  * Interface representing a Bullet game object.
@@ -125,7 +127,7 @@ export class Trajectory extends GameObject implements ITrajectory {
 
       this.physics.applyForce(new Vec2(0, params.gravity * 50000 * timeStep));
       this.physics.applyForce(params.wind.scaleNew(50000 * timeStep));
-      const { acceleration, position, oldPosition } = this.physics.integrate({
+      const { acceleration } = this.physics.integrate({
         delta: timeStep,
       });
 
@@ -138,7 +140,14 @@ export class Trajectory extends GameObject implements ITrajectory {
       // Handle horizontal wrapping
       if (this.physics.position.x < 0) {
         // Add the point at the left edge
-        this.points.push(new Vec2(0, this.physics.position.y));
+        const { intersects, point } = rayBoundaryIntersection(
+          this.physics.oldPosition,
+          this.physics.ray,
+          0,
+          "vertical"
+        );
+        this.points.push(point);
+
         // Add a break point (null) to indicate a gap in the line
         this.points.push(null);
         // Wrap to the right side
@@ -148,7 +157,23 @@ export class Trajectory extends GameObject implements ITrajectory {
         this.points.push(this.physics.position.clone());
       } else if (this.physics.position.x > engine.dims.x) {
         // Add the point at the right edge
-        this.points.push(new Vec2(engine.dims.x, this.physics.position.y));
+        // Find intersection with right edge by creating a ray from old position to current
+        // First attempt - results in some odd artifacts sometimes.
+        // -  this.points.push(new Vec2(engine.dims.x, this.physics.position.y));
+        // Second attempt - Good, but could be encapsulated better.
+        // -  const ray = this.physics.position.subtractNew(this.physics.oldPosition);
+        // -  const t = (engine.dims.x - this.physics.oldPosition.x) / ray.x;
+        // -  const intersectY = this.physics.oldPosition.y + ray.y * t;
+        // -  this.points.push(new Vec2(engine.dims.x, intersectY));
+        // Third attempt - juct compartmentalizing the above into a function
+        const { intersects, point } = rayBoundaryIntersection(
+          this.physics.oldPosition,
+          this.physics.ray,
+          engine.dims.x,
+          "vertical"
+        );
+        this.points.push(point);
+
         // Add a break point (null) to indicate a gap in the line
         this.points.push(null);
         // Wrap to the left side

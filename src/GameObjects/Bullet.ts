@@ -76,7 +76,9 @@ export class Bullet extends GameObject implements IBullet {
     this.physics.applyForce(new Vec2(0, params.gravity * 50000 * deltaTime));
     this.physics.applyForce(params.wind.scaleNew(50000 * deltaTime));
     // Integrate physics
-    this.physics.integrate({ delta: deltaTime });
+    const { acceleration } = this.physics.integrate({
+      delta: deltaTime,
+    });
 
     const groundHeight = params["ground height"];
     const bottom = this.position.y + this.radius;
@@ -87,8 +89,17 @@ export class Bullet extends GameObject implements IBullet {
     }
 
     // Check if off-screen
-    if (this.position.x < 0 || this.position.x > engine.dims.x) {
-      this.isDestroyed = true;
+    // Handle horizontal wra pping
+    if (this.position.x < 0) {
+      this.physics.position.x = engine.dims.x;
+      this.physics.oldPosition.resetToVector(
+        this.physics.position.subtractNew(acceleration)
+      );
+    } else if (this.position.x > engine.dims.x) {
+      this.physics.position.x = 0;
+      this.physics.oldPosition.resetToVector(
+        this.physics.position.subtractNew(acceleration)
+      );
     }
   }
 }

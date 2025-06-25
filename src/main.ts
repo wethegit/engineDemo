@@ -58,5 +58,7 @@ if (gameEngine.canvas) {
   gameEngine.addGameObject(player);
   gameEngine.addGameObject(trajectory);
 
+  gameEngine.swapObjectIndices(player, trajectory);
+
   gameEngine.playing = true;
 }

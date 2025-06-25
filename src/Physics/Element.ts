@@ -97,4 +97,12 @@ export class Element implements IElement {
       oldPosition: this.oldPosition.clone(),
     };
   }
+
+  get velocity(): Vec2 {
+    return this.position.subtractNew(this.oldPosition);
+  }
+
+  get ray(): Vec2 {
+    return this.position.subtractNew(this.oldPosition).normalise();
+  }
 }
