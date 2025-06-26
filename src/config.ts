@@ -4,6 +4,7 @@ import { Pane } from "tweakpane";
 export const params = {
   wind: new Vec2(0, 0),
   gravity: 1,
+  friction: 0.975,
   "ground height": 100,
 };
 
